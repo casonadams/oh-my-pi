@@ -85,6 +85,17 @@ describe("empty foreground contrast", () => {
 		}
 	});
 
+	it("preserves terminal-native foreground and background in the built-in terminal theme", () => {
+		const terminalJson = getBuiltinThemes().terminal;
+		if (!terminalJson) throw new Error("Built-in terminal theme is unavailable");
+		const theme = createTheme(terminalJson, { mode: "truecolor" });
+
+		expect(theme.getBgAnsi("userMessageBg")).toBe("\x1b[49m");
+		expect(theme.getBgAnsi("statusLineBg")).toBe("\x1b[49m");
+		expect(theme.getFgAnsi("text")).toBe("\x1b[39m");
+		expect(theme.getFgAnsi("accent")).toBe("\x1b[38;5;4m");
+	});
+
 	it("pairs the editor surface with its user-message foreground", () => {
 		const { light, dark } = createBaseThemes();
 		try {
